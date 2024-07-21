@@ -35,8 +35,6 @@ class MPHandLandmarks:
         bbox_list = []
         self.handPosList = []
 
-        # print(results)
-
         for idx in range(len(hand_landmarks_list)):
             hand_landmarks = hand_landmarks_list[idx]
             handedness = handedness_list[idx]
@@ -69,16 +67,13 @@ class MPHandLandmarks:
             xmin1, xmax1 = int(min(x_coordinates) * width), int(max(x_coordinates) * width)
             ymin1, ymax1 = int(min(y_coordinates) * height), int(max(y_coordinates) * height)
             bbox_list.append([xmin1, ymin1, xmax1, ymax1])
+            
+            cv2.rectangle(annoted_image, (xmin1 - 20, ymin1 - 20), (xmax1 + 20, ymax1 + 20), (0, 255, 0), 2)
 
             for idx in range(len(self.handPosList)):
                 # Draws point number on hands
                 cv2.putText(annoted_image, str(self.handPosList[idx][2]), (self.handPosList[idx][0] + 2, self.handPosList[idx][1] - 15), cv2.FONT_HERSHEY_PLAIN, self.font_size, self.handedness_text_color, self.font_thickness)
-                # if idx in self.tipIds:
-                #     cv2.circle(annoted_image, (self.handPosList[idx][0] + 5, self.handPosList[idx][1] - 50), 15, (255, 0, 255), cv2.FILLED)
-            # Draws hand bounding box.
-            cv2.rectangle(annoted_image, (xmin1 - 20, ymin1 - 20), (xmax1 + 20, ymax1 + 20), (0, 255, 0), 2)
 
-        
             self.posList = self.handPosList
 
         return annoted_image
@@ -112,11 +107,6 @@ class MPHandLandmarks:
                     fingers.append(1)
                 else:
                     fingers.append(0)
-                    
-        # print(fingers)
 
         return fingers
-    
-    # def checkMouseEvent(self, img):
-    #     pass
     

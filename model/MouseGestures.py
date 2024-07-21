@@ -55,7 +55,6 @@ class MouseGestures(MPHandLandmarks):
             smoothX = (self.plocCX + (x - self.plocCX) / self.smooteness) - 3
             smoothY = (self.plocCY + (y - self.plocCY) / self.smooteness) - 5
 
-            print(int(smoothX), int(smoothY))
             pyautogui.moveTo(smoothX, smoothY)
             cv2.circle(img, (int(self.mouseX), int(self.mouseY)), 15, (100, 57, 1), cv2.FILLED)
 
@@ -63,7 +62,6 @@ class MouseGestures(MPHandLandmarks):
 
 
     def left_click(self, img):
-
         if self.index_tip == 0 and self.middle_tip == 1:
             length, img, lineInfo = self.findDistance(8, 6, img)
 
@@ -77,21 +75,6 @@ class MouseGestures(MPHandLandmarks):
             if length < 32:
                 pyautogui.click(button='right')
 
-
-    def doubleClick(self, img, lmList):
-        pass
-
-    def scroll(self, img, lmList):
-        pass
-
-    def drag(self, img, lmList):
-        pass
-
-    def rightClick(self, img, lmList):
-        pass
-
-    def leftClick(self, img, lmList):
-        pass
 
 
     
