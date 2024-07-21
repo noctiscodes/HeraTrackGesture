@@ -43,20 +43,19 @@ class MouseGestures(MPHandLandmarks):
             self.move(img, self.posList)
 
 
-    def move(self, img, lmList):
-        
+    def move(self, img, lmList):      
         self.mouseX, self.mouseY = lmList[8][:2]
         x, y = lmList[3][:2]
         if self.index_tip == 1 and self.middle_tip == 0:
-            x = np.interp(self.mouseX, (0, self.wCam - self.matchWindow), (0, self.wScr))
-            y = np.interp(self.mouseY, (0, self.hCam - self.matchWindow), (0, self.hScr))
+            x = np.interp(self.mouseX, (self.matchWindow, self.wCam - self.matchWindow), (0, self.wScr))
+            y = np.interp(self.mouseY, (self.matchWindow, self.hCam - self.matchWindow), (0, self.hScr))
 
-            smoothX = self.plocCX + (x - self.plocCX) / self.smooteness
-            smoothY = self.plocCY + (y - self.plocCY) / self.smooteness
+            smoothX = (self.plocCX + (x - self.plocCX) / self.smooteness) - 3
+            smoothY = (self.plocCY + (y - self.plocCY) / self.smooteness) - 5
 
             print(int(smoothX), int(smoothY))
-            pyautogui.moveTo(smoothX + 224, smoothY)
-            cv2.circle(img, (int(self.mouseX), int(self.mouseY)), 15, (255, 0, 255), cv2.FILLED)
+            pyautogui.moveTo(smoothX, smoothY)
+            cv2.circle(img, (int(self.mouseX), int(self.mouseY)), 15, (100, 57, 1), cv2.FILLED)
 
             self.plocCX, self.plocCY = smoothX, smoothY
 
