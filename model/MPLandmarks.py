@@ -20,6 +20,7 @@ class MPHandLandmarks:
         self.font_size = 1
         self.font_thickness = 1
         self.handedness_text_color = (88, 205, 54)
+        self.tipIds = [4, 8, 12, 16, 20]
 
     # Modified from mediapipe guide examples 
     def drawHandLandmarks(self, img, results):
@@ -27,7 +28,9 @@ class MPHandLandmarks:
         handedness_list = results.handedness
         annoted_image = np.copy(img)
         bbox_list = []
-        # self.handPosList = []
+        self.handPosList = []
+
+        # print(results)
 
         for idx in range(len(hand_landmarks_list)):
             hand_landmarks = hand_landmarks_list[idx]
@@ -53,12 +56,41 @@ class MPHandLandmarks:
             x_coordinates = [landmark.x for landmark in hand_landmarks]
             y_coordinates = [landmark.y for landmark in hand_landmarks]
 
+            self.handPosList.extend([ 
+                [int(x_coordinates[idx] * width), int(y_coordinates[idx] * width), idx]
+                for idx, landmark in enumerate(hand_landmarks)
+            ])
+
             xmin1, xmax1 = int(min(x_coordinates) * width), int(max(x_coordinates) * width)
             ymin1, ymax1 = int(min(y_coordinates) * height), int(max(y_coordinates) * height)
             bbox_list.append([xmin1, ymin1, xmax1, ymax1])
 
+            for idx in range(len(self.handPosList)):
+                # Draws point number on hands
+                cv2.putText(annoted_image, str(self.handPosList[idx][2]), (self.handPosList[idx][0] + 5, self.handPosList[idx][1] - 70), cv2.FONT_HERSHEY_PLAIN, self.font_size, self.handedness_text_color, self.font_thickness)
+                # if idx in self.tipIds:
+                #     cv2.circle(annoted_image, (self.handPosList[idx][0] + 5, self.handPosList[idx][1] - 50), 15, (255, 0, 255), cv2.FILLED)
+            # Draws hand bounding box.
             cv2.rectangle(annoted_image, (xmin1 - 20, ymin1 - 20), (xmax1 + 20, ymax1 + 20), (0, 255, 0), 2)
 
         return annoted_image
+    
+    def fingersUp(self):
+        fingers = []
 
+        if self.handPosList != []:
+            if self.handPosList[0][0] > self.handPosList[self.tipIds[0] - 1][0]:
+                fingers.append(0)
+            else:
+                fingers.append(1)
+
+            for id in range(1, 5):
+                if self.handPosList[self.tipIds[id]][1] < self.handPosList[self.tipIds[id] - 2][1]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+                    
+        print(fingers)
+
+        return fingers
     
