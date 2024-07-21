@@ -1,13 +1,7 @@
 from model.MPLandmarks import MPHandLandmarks
 from model.MouseGestures import MouseGestures
 import cv2
-import numpy as np
-
 import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-from mediapipe import solutions
-from mediapipe.framework.formats import landmark_pb2
 
 import time
 
@@ -15,14 +9,9 @@ handLandmark = MPHandLandmarks()
 mouseEvent = MouseGestures()
 detector = handLandmark.handLandmarkerOptionns
 
-wdthCam, hthCam = 740, 480
-
 cap = cv2.VideoCapture(cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FPS, 30)
-
-# print(cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-    
+ 
 while True:
     success, img = cap.read()
     if success:
