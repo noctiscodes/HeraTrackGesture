@@ -41,6 +41,8 @@ class MouseGestures(MPHandLandmarks):
     def checkMouseEvent(self, img):
         if(self.posList != [] and len(self.fingersUp()) > 4):
             self.move(img, self.posList)
+            self.left_click(img)
+            self.right_click(img)
 
 
     def move(self, img, lmList):      
@@ -60,8 +62,21 @@ class MouseGestures(MPHandLandmarks):
             self.plocCX, self.plocCY = smoothX, smoothY
 
 
-    def click(self, img):
-        pass
+    def left_click(self, img):
+
+        if self.index_tip == 0 and self.middle_tip == 1:
+            length, img, lineInfo = self.findDistance(8, 6, img)
+
+            if length < 35:
+                pyautogui.click(button='left')
+
+    def right_click(self, img):
+        if self.index_tip == 0 and self.middle_tip == 0:
+            length, img, lineInfo = self.findDistance(12, 10, img)
+
+            if length < 32:
+                pyautogui.click(button='right')
+
 
     def doubleClick(self, img, lmList):
         pass

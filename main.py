@@ -29,22 +29,11 @@ while True:
         img = cv2.flip(img, 1)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=img)
 
-        
-
-        # results = landmarker.detect_for_video(mp_image, timestamp_ms=int(time.time() * 1000))
-
         results = detector.detect_for_video(mp_image, timestamp_ms=int(time.time() * 1000))
-        # mouseEvent.click(mp_image, results.hand_landmarks)
-        
-
         # print(img)
 
-        # annotated_image = draw_landmarks_on_image(mp_image.numpy_view(), results)
-        # annotated_image = handLandmark.drawHandLandmarks(mp_image.numpy_view(), results)
         annotated_image = mouseEvent.drawHandLandmarks(mp_image.numpy_view(), results)
         initialize_mouse = mouseEvent.setInitForMouseGestures()
-        # position = handLandmark.findPos(annotated_image, results)
-        # checkFingers = handLandmark.fingersUp()
         mouseMoves = mouseEvent.checkMouseEvent(annotated_image)
         # print(annotated_image);
 

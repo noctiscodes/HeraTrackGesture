@@ -4,6 +4,7 @@ from mediapipe.tasks.python import vision
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 import numpy as np
+import math
 import cv2
 
 # model\hand_landmarker.task
@@ -81,6 +82,21 @@ class MPHandLandmarks:
             self.posList = self.handPosList
 
         return annoted_image
+    
+    def findDistance(self, p1, p2, img):
+        x1, y1 = self.posList[p1][1:]
+        x2, y2 = self.posList[p2][1:]
+
+        cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+
+        cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 2)
+        cv2.circle(img, (x1, y1), 15, (34, 120, 255), cv2.FILLED)
+        cv2.circle(img, (x2, y2), 15, (34, 120, 255), cv2.FILLED)
+        cv2.circle(img, (cx, cy), 15, (0, 0, 255), cv2.FILLED)
+
+        length = math.hypot(x2 - x1, y2 - y1)
+
+        return length, img, [x1, y1, x2, y2, cx, cy]
     
     def fingersUp(self):
         fingers = []
